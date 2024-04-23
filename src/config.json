@@ -1,0 +1,7 @@
+{
+  "db": {
+    "url": "jdbc:mysql://localhost:3306/pomona_transit_system",
+    "username": "root",
+    "password": "Elopez5620!"
+  }
+}
