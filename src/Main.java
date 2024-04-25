@@ -6,7 +6,7 @@ public class Main {
     public static int choice = -1;
     public static int tripNumber;
     public static int busID;
-    public static char resume = 'Y';
+    public static char resume;
     public static Date date;
     public static Date endDate;
     public static Time scheduledStartTime = null;
