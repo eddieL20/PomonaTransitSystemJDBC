@@ -1,37 +1,35 @@
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws SQLException, IOException, ParseException {
-        JSONParser parser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/config.json"));
-
-        JSONObject dbObject = (JSONObject) jsonObject.get("db");
-        String url = (String) dbObject.get("url");
-        String username = (String) dbObject.get("username");
-        String password = (String) dbObject.get("password");
-
-        int choice = -1;
-        char resume = 'Y';
-        Date date;
-        Time scheduledStartTime = null;
-        String date_str;
-        String time_str;
-        Scanner scanner = new Scanner(System.in);
-
+    public static int choice = -1;
+    public static int tripNumber;
+    public static int busID;
+    public static char resume = 'Y';
+    public static Date date;
+    public static Date endDate;
+    public static Time scheduledStartTime = null;
+    public static Time scheduledArrivalTime = null;
+    public static String date_str;
+    public static String time_str;
+    public static String driverName;
+    public static String startLocation;
+    public static String destination;
+    public static String telephoneNumber;
+    public static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+    public static Scanner scanner = new Scanner(System.in);
+    public static void main(String[] args) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, username, password);
-            Statement st = con.createStatement();
-
             PomonaTransitSystem pts = new PomonaTransitSystem();
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Create connection with Pomona Transit System credentials
+            Connection con = DriverManager.getConnection(
+                    pts.getUrl(),
+                    pts.getUsername(),
+                    pts.getPassword()
+            );
 
             do {
                 System.out.println("1: Display Trip Schedule");
@@ -42,8 +40,10 @@ public class Main {
                 System.out.println("6: Display Trip Stops");
                 System.out.println("7: Display Weekly Schedule");
                 System.out.println("8: Add Driver");
+                System.out.println("9: Delete Bus");
                 System.out.println("0: Quit");
 
+                // If integer continue, else throw exception
                 if(scanner.hasNextInt()){
                     choice = scanner.nextInt();
                     scanner.nextLine();
@@ -53,51 +53,109 @@ public class Main {
                             resume = 'N';
                             break;
                         case 1:
-                            System.out.print("\nEnter Start Location: ");
-                            String startLocation = scanner.nextLine();
-                            System.out.print("Enter Destination: ");
-                            String destination = scanner.nextLine();
-                            System.out.print("Enter Date (yyyy-mm-dd): ");
-                            date_str = scanner.next();
-                            date = Date.valueOf(date_str);
-
+                            setDisplayTripOfferingInfo();
                             pts.displayTripSchedule(
                                     con,
                                     startLocation,
                                     destination,
                                     date
                             );
-
-                            System.out.print("\nContinue? (Y)Yes, (N)Any other key: ");
-                            resume = scanner.next().charAt(0);
-                            String r = String.valueOf(resume).toUpperCase();
-                            resume = r.charAt(0);
+                            continueQuestion();
                             break;
                         case 2:
-                            System.out.print("\nEnter Trip Number: ");
-                            int tripNumber = scanner.nextInt();
-                            scanner.nextLine();
-                            System.out.print("Enter Date (yyyy-mm-dd): ");
-
-                            date_str = scanner.nextLine();
-                            date = Date.valueOf(date_str);
-
-                            System.out.print("Enter Scheduled Start Time: ");
-                            time_str = scanner.nextLine();
-                            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-                            try{
-                                java.util.Date date1 = sdf.parse(time_str);
-                                scheduledStartTime = new Time(date1.getTime());
-                            } catch (java.text.ParseException e){
-                                System.out.println("Error parsing time: " + e.getMessage());
-                            }
-
+                            pts.displayAllTripOfferings(con);
+                            setDeleteTripOfferingInfo();
                             pts.deleteTripOffering(
                                     con,
                                     tripNumber,
                                     date,
                                     scheduledStartTime
                             );
+                            pts.displayAllTripOfferings(con);
+                            continueQuestion();
+                            break;
+                        case 3:
+                            pts.displayAllTripOfferings(con);
+                            setAddTripOfferingInfo();
+                            pts.addTripOffering(
+                                    con,
+                                    tripNumber,
+                                    date,
+                                    scheduledStartTime,
+                                    scheduledArrivalTime,
+                                    driverName,
+                                    busID
+                            );
+                            pts.displayAllTripOfferings(con);
+                            continueQuestion();
+                            break;
+                        case 4:
+                            pts.displayAllTripOfferings(con);
+                            setChangeDriverInfo();
+                            pts.changeDriverForTripOffering(
+                                    con,
+                                    tripNumber,
+                                    date,
+                                    scheduledStartTime,
+                                    driverName
+                            );
+                            pts.displayAllTripOfferings(con);
+                            continueQuestion();
+                            break;
+                        case 5:
+                            pts.displayAllTripOfferings(con);
+                            setChangeBusForTripOfferingInfo();
+                            pts.changeBusForTripOffering(
+                                    con,
+                                    tripNumber,
+                                    date,
+                                    scheduledStartTime,
+                                    busID
+                            );
+                            pts.displayAllTripOfferings(con);
+                            continueQuestion();
+                            break;
+                        case 6:
+                            System.out.print("\nEnter Trip Number: ");
+                            tripNumber = scanner.nextInt();
+                            scanner.nextLine();
+
+                            pts.displayTripStops(
+                                    con,
+                                    tripNumber
+                            );
+
+                            continueQuestion();
+                            break;
+                        case 7:
+                            setWeeklyScheduleInfo();
+                            pts.displayWeeklySchedule(
+                                    con,
+                                    driverName,
+                                    date,
+                                    endDate
+                            );
+                            continueQuestion();
+                            break;
+                        case 8:
+                            pts.displayAllDrivers(con);
+                            setDriverInfo();
+                            pts.addDriver(
+                                    con,
+                                    driverName,
+                                    telephoneNumber
+                            );
+                            pts.displayAllDrivers(con);
+                            continueQuestion();
+                            break;
+                        case 9:
+                            pts.displayAllBuses(con);
+                            setDeleteBusInfo();
+                            pts.deleteBus(
+                                    con,
+                                    busID
+                            );
+                            pts.displayAllBuses(con);
                         default:
                             break;
                     }
@@ -109,11 +167,184 @@ public class Main {
 
             System.out.println("Goodbye...");
 
-            st.close();
             con.close();
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    public static void setDisplayTripOfferingInfo(){
+        System.out.print("\nEnter Start Location: ");
+        startLocation = scanner.nextLine();
+
+        System.out.print("Enter Destination: ");
+        destination = scanner.nextLine();
+
+        System.out.print("Enter Date (yyyy-mm-dd): ");
+        date_str = scanner.next();
+        date = Date.valueOf(date_str);
+    }
+
+    // Used after an action on the database
+    public static void continueQuestion(){
+        System.out.print("\nContinue? (Y)Yes, (N)Any other key: ");
+        resume = scanner.next().charAt(0);
+        String r = String.valueOf(resume).toUpperCase();
+        resume = r.charAt(0);
+    }
+
+    public static void setDeleteTripOfferingInfo(){
+        // Set Trip Number
+        System.out.print("\nEnter Trip Number: ");
+        tripNumber = scanner.nextInt();
+        scanner.nextLine();
+
+        // Set Date
+        System.out.print("Enter Date (yyyy-mm-dd): ");
+        date_str = scanner.nextLine();
+        date = Date.valueOf(date_str);
+
+        // Set Scheduled Start Time
+        System.out.print("Enter Scheduled Start Time: ");
+        time_str = scanner.nextLine();
+
+        try{
+            java.util.Date date1 = sdf.parse(time_str);
+            scheduledStartTime = new Time(date1.getTime());
+        } catch (java.text.ParseException e){
+            System.out.println("Error parsing time: " + e.getMessage());
+        }
+
+    }
+
+    public static void setAddTripOfferingInfo(){
+        // Set Trip Number
+        System.out.print("\nEnter Trip Number: ");
+        tripNumber = scanner.nextInt();
+        scanner.nextLine();
+
+        // Set Date
+        System.out.print("Enter Date (yyyy-mm-dd): ");
+        date_str = scanner.nextLine();
+        date = Date.valueOf(date_str);
+
+        // Set Scheduled Start Time
+        System.out.print("Enter Scheduled Start Time: ");
+        time_str = scanner.nextLine();
+
+        try{
+            java.util.Date date1 = sdf.parse(time_str);
+            scheduledStartTime = new Time(date1.getTime());
+        } catch (java.text.ParseException e){
+            System.out.println("Error parsing time: " + e.getMessage());
+        }
+
+        // Set Scheduled Arrival Time
+        System.out.print("Enter Scheduled Arrival Time: ");
+        time_str = scanner.nextLine();
+        sdf = new SimpleDateFormat("HH:mm:ss");
+
+        try{
+            java.util.Date date1 = sdf.parse(time_str);
+            scheduledArrivalTime = new Time(date1.getTime());
+        } catch (java.text.ParseException e){
+            System.out.println("Error parsing time: " + e.getMessage());
+        }
+
+        // Set Driver's Name
+        System.out.print("Enter Driver's Name: ");
+        driverName = scanner.nextLine();
+
+        // Set Bus ID
+        System.out.print("Enter Bus ID: ");
+        busID = scanner.nextInt();
+        scanner.nextLine();
+    }
+
+    public static void setChangeDriverInfo(){
+        // Set Trip Number
+        tripNumber = scanner.nextInt();
+        scanner.nextLine();
+
+        // Set Date
+        System.out.print("Enter Date (yyyy-mm-dd): ");
+        date_str = scanner.nextLine();
+        date = Date.valueOf(date_str);
+
+        // Set Scheduled Start Time
+        System.out.print("Enter Scheduled Start Time: ");
+        time_str = scanner.nextLine();
+
+        try{
+            java.util.Date date1 = sdf.parse(time_str);
+            scheduledStartTime = new Time(date1.getTime());
+        } catch (java.text.ParseException e){
+            System.out.println("Error parsing time: " + e.getMessage());
+        }
+
+        // Set New Driver's Name
+        System.out.print("Enter Driver's Name: ");
+        driverName = scanner.nextLine();
+    }
+
+    public static void setChangeBusForTripOfferingInfo(){
+        // Set Trip Number
+        System.out.print("\nEnter Trip Number: ");
+        tripNumber = scanner.nextInt();
+        scanner.nextLine();
+
+        // Set Date
+        System.out.print("Enter Date (yyyy-mm-dd): ");
+        date_str = scanner.nextLine();
+        date = Date.valueOf(date_str);
+
+        // Set Scheduled Start Time
+        System.out.print("Enter Scheduled Start Time: ");
+        time_str = scanner.nextLine();
+
+        try{
+            java.util.Date date1 = sdf.parse(time_str);
+            scheduledStartTime = new Time(date1.getTime());
+        } catch (java.text.ParseException e){
+            System.out.println("Error parsing time: " + e.getMessage());
+        }
+
+        // Set Bus ID
+        System.out.print("Enter Bus ID: ");
+        busID = scanner.nextInt();
+        scanner.nextLine();
+    }
+
+    public static void setWeeklyScheduleInfo(){
+        // Set Driver's Name
+        System.out.print("Enter Driver's Name: ");
+        driverName = scanner.nextLine();
+
+        // Set Start Date
+        System.out.print("Enter Date (yyyy-mm-dd): ");
+        date_str = scanner.nextLine();
+        date = Date.valueOf(date_str);
+
+        // Set Start Date
+        System.out.print("Enter Date (yyyy-mm-dd): ");
+        date_str = scanner.nextLine();
+        endDate = Date.valueOf(date_str);
+    }
+
+    public static void setDriverInfo(){
+        // Set New Driver's Name
+        System.out.print("Enter Driver's Name: ");
+        driverName = scanner.nextLine();
+
+        // Set Telephone Number
+        System.out.print("Enter Telephone Number : ");
+        telephoneNumber = scanner.nextLine();
+
+    }
+    public static void setDeleteBusInfo(){
+        // Set Bus ID
+        System.out.print("Enter Bus ID: ");
+        busID = scanner.nextInt();
+        scanner.nextLine();
     }
 }
