@@ -192,7 +192,7 @@ public class Main {
 
     // Used after an action on the database
     public static void continueQuestion(){
-        System.out.print("\nContinue? (Y)Yes, (N)Any other key: ");
+        System.out.print("\nContinue? (Y/y)Yes, (Any Key)No: ");
         resume = scanner.next().charAt(0);
         String r = String.valueOf(resume).toUpperCase();
         resume = r.charAt(0);
