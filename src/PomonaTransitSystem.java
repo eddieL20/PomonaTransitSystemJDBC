@@ -1,25 +1,7 @@
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.*;
 
 public class PomonaTransitSystem {
 
-    private final String url;
-    private final String username;
-    private final String password;
-    public PomonaTransitSystem() throws IOException, ParseException {
-        JSONParser parser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("src/config.json"));
-
-        JSONObject dbObject = (JSONObject) jsonObject.get("db");
-        url = (String) dbObject.get("url");
-        username = (String) dbObject.get("username");
-        password = (String) dbObject.get("password");
-    }
     public void displayTripSchedule(
             Connection con,
             String startLocation,
@@ -263,16 +245,5 @@ public class PomonaTransitSystem {
             throw new RuntimeException(e);
         }
         System.out.println();
-    }
-    public String getUrl() {
-        return url;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
     }
 }

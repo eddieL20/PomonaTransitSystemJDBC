@@ -19,6 +19,11 @@ public class Main {
     public static String telephoneNumber;
     public static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
     public static Scanner scanner = new Scanner(System.in);
+    public static final String URL = "jdbc:mysql://localhost:3306/pomona_transit_system";
+    public static final String USER = "user";
+    public static final String PASSWORD = "password";
+
+
     public static void main(String[] args) {
         try {
             PomonaTransitSystem pts = new PomonaTransitSystem();
@@ -26,9 +31,9 @@ public class Main {
 
             // Create connection with Pomona Transit System credentials
             Connection con = DriverManager.getConnection(
-                    pts.getUrl(),
-                    pts.getUsername(),
-                    pts.getPassword()
+                    URL,
+                    USER,
+                    PASSWORD
             );
 
             do {
