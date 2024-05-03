@@ -1,9 +1,6 @@
 package GUI.Frames;
 
-import GUI.Panels.AddTripOfferingPanel;
-import GUI.Panels.AdminPanel;
-import GUI.Panels.DeleteTripOfferingPanel;
-import GUI.Panels.TripSchedulePanel;
+import GUI.Panels.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -79,6 +76,13 @@ public class AdminControlPanelFrame extends JFrame {
                     EditFrame atoFrame = new EditFrame(new AddTripOfferingPanel());
                     atoFrame.setTitle("Add Trip Offering");
                 });
+
+        adminPanel
+                .getAddDriverButton()
+                .addActionListener(e -> {
+                    EditFrame adoFrame = new EditFrame(new AddDriverPanel());
+                    adoFrame.setTitle("Add Driver");
+                });
     }
 
     public Connection getConnection() {
@@ -107,6 +111,24 @@ public class AdminControlPanelFrame extends JFrame {
             }
             return stringWriter;
         }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public StringWriter displayAllDrivers(){
+        String query  = "SELECT * FROM Driver";
+
+        try(PreparedStatement statement = connection.prepareStatement(query)){
+            ResultSet resultSet = statement.executeQuery(query);
+            StringWriter stringWriter = new StringWriter();
+            while (resultSet.next()){
+                stringWriter.write(String.format("%n====================================%n"));
+                stringWriter.write(String.format("Driver: %s%n", resultSet.getString("DriverName")));
+                stringWriter.write(String.format("Telephone Number: %s%n", resultSet.getString("DriverTelephoneNumber")));
+                stringWriter.write(String.format("====================================%n"));
+            }
+            return stringWriter;
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
