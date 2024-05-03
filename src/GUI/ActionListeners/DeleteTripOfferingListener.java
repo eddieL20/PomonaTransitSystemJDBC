@@ -21,21 +21,24 @@ public class DeleteTripOfferingListener implements ActionListener {
         Connection connection = AdminControlPanelFrame.getInstance().getConnection();
 
         // Get text from Trim Number text field
-        int tripNumber = Integer.parseInt(delTripOfferingPanel
-                .getTripNumberTextField()
-                .getText()
+        int tripNumber = Integer.parseInt(
+                delTripOfferingPanel
+                        .getTripNumberTextField()
+                        .getText()
         );
 
         // Get date from Date text field
-        Date date = Date.valueOf(delTripOfferingPanel
+        Date date = Date.valueOf(
+                delTripOfferingPanel
                         .getDateTextField()
                         .getText()
         );
 
         // Get time from Scheduled Start Time text file
-        Time scheduledStartTime = setTime(delTripOfferingPanel
-                .getScheduledStartTime()
-                .getText()
+        Time scheduledStartTime = Time.valueOf(
+                delTripOfferingPanel
+                        .getScheduledStartTime()
+                        .getText()
         );
 
         // Create formatted query string
@@ -60,15 +63,5 @@ public class DeleteTripOfferingListener implements ActionListener {
         }
 
 
-    }
-
-    // Method for formatting a string into Time
-    private Time setTime(String time){
-        try{
-            java.util.Date date1 = new SimpleDateFormat("HH:mm:ss").parse(time);
-            return new Time(date1.getTime());
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

@@ -21,24 +21,28 @@ public class AddTripOfferingListener implements ActionListener {
 
         Connection connection = AdminControlPanelFrame.getInstance().getConnection();
 
-        int tripNumber =  Integer.parseInt(addTripOfferingPanel
-                .getTripNumber()
-                .getText()
+        int tripNumber =  Integer.parseInt(
+                addTripOfferingPanel
+                        .getTripNumber()
+                        .getText()
         );
-        Date date = Date.valueOf(addTripOfferingPanel
-                .getDate()
-                .getText()
-        );
-
-
-        Time scheduledStartTime = setTime(addTripOfferingPanel
-                .getScheduledStartTime()
-                .getText()
+        Date date = Date.valueOf(
+                addTripOfferingPanel
+                        .getDate()
+                        .getText()
         );
 
-        Time scheduledArrivalTime = setTime(addTripOfferingPanel
-                .getScheduledArrivalTime()
-                .getText()
+
+        Time scheduledStartTime = Time.valueOf(
+                addTripOfferingPanel
+                        .getScheduledStartTime()
+                        .getText()
+        );
+
+        Time scheduledArrivalTime = Time.valueOf(
+                addTripOfferingPanel
+                        .getScheduledArrivalTime()
+                        .getText()
         );
 
         String driverName = addTripOfferingPanel
@@ -73,16 +77,5 @@ public class AddTripOfferingListener implements ActionListener {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
-
     }
-
-    private Time setTime(String time){
-        try{
-            java.util.Date date1 = new SimpleDateFormat("HH:mm:ss").parse(time);
-            return new Time(date1.getTime());
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 }

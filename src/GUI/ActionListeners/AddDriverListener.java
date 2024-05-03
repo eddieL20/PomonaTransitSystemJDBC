@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class AddDriverListener implements ActionListener {
-    // TODO: AddDriverListener
     private final AddDriverPanel addDriverPanel;
 
     public AddDriverListener(AddDriverPanel addDriverPanel) {

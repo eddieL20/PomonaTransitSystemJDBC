@@ -34,6 +34,7 @@ public class AddDriverPanel extends JPanel {
 
         c.gridy = 2;
         this.add(submitButton, c);
+        submitButton.addActionListener(new AddDriverListener(this));
 
         c.gridx = 0;
         c.gridy = 3;
@@ -50,10 +51,6 @@ public class AddDriverPanel extends JPanel {
                         .displayAllDrivers()
                         .toString()
         );
-
-        submitButton.addActionListener(new AddDriverListener(this));
-
-
     }
     public JTextField getDriverName() {
         return driverName;

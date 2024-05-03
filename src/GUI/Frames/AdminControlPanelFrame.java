@@ -83,6 +83,13 @@ public class AdminControlPanelFrame extends JFrame {
                     EditFrame adoFrame = new EditFrame(new AddDriverPanel());
                     adoFrame.setTitle("Add Driver");
                 });
+
+        adminPanel
+                .getChangeBusButton()
+                .addActionListener(e -> {
+                    EditFrame changeBusFrame = new EditFrame(new ChangeBusForTripOfferingPanel());
+                    changeBusFrame.setTitle("Change Bus for Trip Offering");
+                });
     }
 
     public Connection getConnection() {
