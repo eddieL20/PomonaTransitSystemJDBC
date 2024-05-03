@@ -1,13 +1,18 @@
 package GUI.Frames;
 
-import GUI.ActionListeners.TripScheduleViewListener;
+import GUI.Panels.AddTripOfferingPanel;
 import GUI.Panels.AdminPanel;
+import GUI.Panels.DeleteTripOfferingPanel;
+import GUI.Panels.TripSchedulePanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.StringWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AdminControlPanelFrame extends JFrame {
@@ -52,10 +57,28 @@ public class AdminControlPanelFrame extends JFrame {
         this.setResizable(false); // frame cannot be resized
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // terminate when closed
 
-        TripScheduleViewListener dsvListener = new TripScheduleViewListener();
+        adminPanel
+                .getDisplayTripScheduleButton()
+                .addActionListener(e -> {
+                            EditFrame tsFrame = new EditFrame(new TripSchedulePanel());
+                            tsFrame.setTitle("Trip Schedule Information");
+                        }
 
-        adminPanel.getDisplayTripScheduleButton().addActionListener(dsvListener);
+                );
 
+        adminPanel
+                .getDeleteTripOfferingButton()
+                .addActionListener(e -> {
+                    EditFrame dtoFrame = new EditFrame(new DeleteTripOfferingPanel());
+                    dtoFrame.setTitle("Delete Trip Offering");
+                });
+
+        adminPanel
+                .getAddTripOfferingButton()
+                .addActionListener(e -> {
+                    EditFrame atoFrame = new EditFrame(new AddTripOfferingPanel());
+                    atoFrame.setTitle("Add Trip Offering");
+                });
     }
 
     public Connection getConnection() {
@@ -64,5 +87,27 @@ public class AdminControlPanelFrame extends JFrame {
 
     public void setConnection(Connection connection){
         this.connection = connection;
+    }
+
+    public StringWriter displayAllTripOfferings(){
+        String query = "SELECT * FROM TripOffering";
+
+        try(PreparedStatement statement = connection.prepareStatement(query)){
+            ResultSet resultSet = statement.executeQuery(query);
+            StringWriter stringWriter = new StringWriter();
+            while (resultSet.next()){
+                stringWriter.write(String.format("%n====================================%n"));
+                stringWriter.write(String.format("Trip Number: %s%n",  resultSet.getString("TripNumber")));
+                stringWriter.write(String.format("Date: %s%n", resultSet.getString("Date")));
+                stringWriter.write(String.format("Scheduled Start Time: %s%n",  resultSet.getString("ScheduledStartTime")));
+                stringWriter.write(String.format("Scheduled Arrival Time: %s%n", resultSet.getString("ScheduledArrivalTime")));
+                stringWriter.write(String.format("Driver: %s%n", resultSet.getString("DriverName")));
+                stringWriter.write(String.format("Bus ID: %s%n", resultSet.getString("BusID")));
+                stringWriter.write(String.format("====================================%n"));
+            }
+            return stringWriter;
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
     }
 }
