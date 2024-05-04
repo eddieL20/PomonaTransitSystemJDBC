@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.sql.*;
 
 public class ChangeDriverForTripOfferingListener implements ActionListener {
-    // TODO: ChangeDriverForTripOfferingListener
     private final ChangeDriverForTripOfferingPanel changeDriverForTripOfferingPanel;
 
     public ChangeDriverForTripOfferingListener(

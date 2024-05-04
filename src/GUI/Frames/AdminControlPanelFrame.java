@@ -97,6 +97,12 @@ public class AdminControlPanelFrame extends JFrame {
                     PopUpFrame changeDriverFrame = new PopUpFrame(new ChangeDriverForTripOfferingPanel());
                     changeDriverFrame.setTitle("Change Driver for Trip Offering");
                 });
+
+        adminPanel.getDisplayTripStopsButton()
+                .addActionListener(e -> {
+                    PopUpFrame dtsFrame = new PopUpFrame(new DisplayTripStopPanel());
+                    dtsFrame.setTitle("Display Trip Stop");
+                });
     }
 
     public Connection getConnection() {
