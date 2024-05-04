@@ -103,6 +103,12 @@ public class AdminControlPanelFrame extends JFrame {
                     PopUpFrame dtsFrame = new PopUpFrame(new DisplayTripStopPanel());
                     dtsFrame.setTitle("Display Trip Stop");
                 });
+
+        adminPanel.getDisplayWeeklyScheduleButton()
+                .addActionListener(e -> {
+                    PopUpFrame weeklyFrame = new PopUpFrame(new DisplayWeeklySchedulePanel());
+                    weeklyFrame.setTitle("Display Weekly Schedule");
+                });
     }
 
     public Connection getConnection() {

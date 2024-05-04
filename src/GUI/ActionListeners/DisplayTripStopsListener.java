@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DisplayTripStopsListener implements ActionListener {
-    // TODO: DisplayTripStopsListener
     private final DisplayTripStopPanel displayTripStopPanel;
 
     public DisplayTripStopsListener(DisplayTripStopPanel displayTripStopPanel) {
