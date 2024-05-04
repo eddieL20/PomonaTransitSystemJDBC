@@ -63,7 +63,6 @@ public class ChangeBusForTripOfferingListener implements ActionListener {
                     AdminControlPanelFrame
                             .getInstance()
                             .displayAllTripOfferings()
-                            .toString()
             );
 
         } catch (SQLException ex) {

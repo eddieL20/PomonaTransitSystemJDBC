@@ -54,41 +54,42 @@ public class AdminControlPanelFrame extends JFrame {
         this.setResizable(false); // frame cannot be resized
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // terminate when closed
 
-        adminPanel
-                .getDisplayTripScheduleButton()
+        adminPanel.getDisplayTripScheduleButton()
                 .addActionListener(e -> {
-                            EditFrame tsFrame = new EditFrame(new TripSchedulePanel());
+                            PopUpFrame tsFrame = new PopUpFrame(new TripSchedulePanel());
                             tsFrame.setTitle("Trip Schedule Information");
                         }
 
                 );
 
-        adminPanel
-                .getDeleteTripOfferingButton()
+        adminPanel.getDeleteTripOfferingButton()
                 .addActionListener(e -> {
-                    EditFrame dtoFrame = new EditFrame(new DeleteTripOfferingPanel());
+                    PopUpFrame dtoFrame = new PopUpFrame(new DeleteTripOfferingPanel());
                     dtoFrame.setTitle("Delete Trip Offering");
                 });
 
-        adminPanel
-                .getAddTripOfferingButton()
+        adminPanel.getAddTripOfferingButton()
                 .addActionListener(e -> {
-                    EditFrame atoFrame = new EditFrame(new AddTripOfferingPanel());
+                    PopUpFrame atoFrame = new PopUpFrame(new AddTripOfferingPanel());
                     atoFrame.setTitle("Add Trip Offering");
                 });
 
-        adminPanel
-                .getAddDriverButton()
+        adminPanel.getAddDriverButton()
                 .addActionListener(e -> {
-                    EditFrame adoFrame = new EditFrame(new AddDriverPanel());
+                    PopUpFrame adoFrame = new PopUpFrame(new AddDriverPanel());
                     adoFrame.setTitle("Add Driver");
                 });
 
-        adminPanel
-                .getChangeBusButton()
+        adminPanel.getChangeBusButton()
                 .addActionListener(e -> {
-                    EditFrame changeBusFrame = new EditFrame(new ChangeBusForTripOfferingPanel());
+                    PopUpFrame changeBusFrame = new PopUpFrame(new ChangeBusForTripOfferingPanel());
                     changeBusFrame.setTitle("Change Bus for Trip Offering");
+                });
+
+        adminPanel.getDeleteBusButton()
+                .addActionListener(e -> {
+                    PopUpFrame deleteBusFrame = new PopUpFrame(new DeleteBusPanel());
+                    deleteBusFrame.setTitle("Delete Bus");
                 });
     }
 
@@ -100,7 +101,7 @@ public class AdminControlPanelFrame extends JFrame {
         this.connection = connection;
     }
 
-    public StringWriter displayAllTripOfferings(){
+    public String displayAllTripOfferings(){
         String query = "SELECT * FROM TripOffering";
 
         try(PreparedStatement statement = connection.prepareStatement(query)){
@@ -116,13 +117,13 @@ public class AdminControlPanelFrame extends JFrame {
                 stringWriter.write(String.format("Bus ID: %s%n", resultSet.getString("BusID")));
                 stringWriter.write(String.format("====================================%n"));
             }
-            return stringWriter;
+            return stringWriter.toString();
         }catch (SQLException e){
             throw new RuntimeException(e);
         }
     }
 
-    public StringWriter displayAllDrivers(){
+    public String displayAllDrivers(){
         String query  = "SELECT * FROM Driver";
 
         try(PreparedStatement statement = connection.prepareStatement(query)){
@@ -134,8 +135,26 @@ public class AdminControlPanelFrame extends JFrame {
                 stringWriter.write(String.format("Telephone Number: %s%n", resultSet.getString("DriverTelephoneNumber")));
                 stringWriter.write(String.format("====================================%n"));
             }
-            return stringWriter;
+            return stringWriter.toString();
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String displayAllBuses(){
+        String query = "SELECT * FROM Bus";
+        try (PreparedStatement statement = connection.prepareStatement(query)){
+            ResultSet resultSet = statement.executeQuery(query);
+            StringWriter stringWriter = new StringWriter();
+            while(resultSet.next()){
+                stringWriter.write(String.format("%n====================================%n"));
+                stringWriter.write(String.format("Bus ID: %s%n", resultSet.getString("BusID")));
+                stringWriter.write(String.format("Model: %s%n", resultSet.getString("Model")));
+                stringWriter.write(String.format("Year: %s%n", resultSet.getString("Year")));
+                stringWriter.write(String.format("====================================%n"));
+            }
+            return stringWriter.toString();
+        } catch (SQLException e){
             throw new RuntimeException(e);
         }
     }

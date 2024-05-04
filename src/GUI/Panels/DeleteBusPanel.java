@@ -1,45 +1,34 @@
 package GUI.Panels;
 
-import GUI.ActionListeners.AddDriverListener;
+import GUI.ActionListeners.DeleteBusListener;
 import GUI.Frames.AdminControlPanelFrame;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class AddDriverPanel extends JPanel {
-    private final JTextField driverName = new JTextField(20);
-    private final JTextField telephoneNumber = new JTextField(20);
+public class DeleteBusPanel extends JPanel {
+    private final JTextField busID = new JTextField(20);
     private final JButton submitButton = new JButton("Submit");
     private final TextArea resultsTextArea = new TextArea();
 
-    public AddDriverPanel(){
+    public DeleteBusPanel(){
         GridBagConstraints c = new GridBagConstraints();
         this.setLayout(new GridBagLayout());
-
         this.setBackground(Color.GRAY);
 
         c.gridx = 0;
         c.gridy = 0;
-        this.add(new JLabel("Driver's Name"), c);
-
+        this.add(new JLabel("Bus ID: "), c);
         c.gridx = 1;
-        this.add(driverName, c);
+        this.add(busID, c);
 
-        c.gridx = 0;
         c.gridy = 1;
-        this.add(new JLabel("Telephone Number: "),c);
-
-        c.gridx = 1;
-        this.add(telephoneNumber, c);
-
-        c.gridy = 2;
         this.add(submitButton, c);
-        submitButton.addActionListener(new AddDriverListener(this));
+        submitButton.addActionListener(new DeleteBusListener(this));
 
         c.gridx = 0;
-        c.gridy = 3;
+        c.gridy = 2;
         c.gridwidth = 2;
-
         resultsTextArea.setPreferredSize(new Dimension(475, 550));
         JScrollPane scrollPane = new JScrollPane(resultsTextArea);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -48,15 +37,13 @@ public class AddDriverPanel extends JPanel {
         resultsTextArea.setText(
                 AdminControlPanelFrame
                         .getInstance()
-                        .displayAllDrivers()
+                        .displayAllBuses()
         );
-    }
-    public JTextField getDriverName() {
-        return driverName;
+
     }
 
-    public JTextField getTelephoneNumber() {
-        return telephoneNumber;
+    public JTextField getBusID() {
+        return busID;
     }
 
     public JButton getSubmitButton() {

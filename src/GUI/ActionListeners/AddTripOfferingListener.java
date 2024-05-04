@@ -71,7 +71,6 @@ public class AddTripOfferingListener implements ActionListener {
                     AdminControlPanelFrame
                             .getInstance()
                             .displayAllTripOfferings()
-                            .toString()
             );
 
         } catch (SQLException ex) {

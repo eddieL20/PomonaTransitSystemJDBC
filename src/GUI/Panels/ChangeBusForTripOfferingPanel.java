@@ -59,7 +59,6 @@ public class ChangeBusForTripOfferingPanel extends JPanel {
                 AdminControlPanelFrame
                         .getInstance()
                         .displayAllTripOfferings()
-                        .toString()
         );
 
 

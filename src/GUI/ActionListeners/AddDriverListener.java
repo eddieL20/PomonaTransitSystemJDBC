@@ -41,7 +41,6 @@ public class AddDriverListener implements ActionListener {
                     AdminControlPanelFrame
                             .getInstance()
                             .displayAllDrivers()
-                            .toString()
             );
         } catch (SQLException ex) {
             throw new RuntimeException(ex);

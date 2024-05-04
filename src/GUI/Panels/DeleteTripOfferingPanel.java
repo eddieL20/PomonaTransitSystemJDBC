@@ -55,7 +55,7 @@ public class DeleteTripOfferingPanel extends JPanel {
 
         resultsTextArea.setText(AdminControlPanelFrame
                 .getInstance()
-                .displayAllTripOfferings().toString()
+                .displayAllTripOfferings()
         );
 
         submitButton.addActionListener(new DeleteTripOfferingListener(this));

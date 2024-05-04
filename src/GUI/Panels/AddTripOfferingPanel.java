@@ -84,7 +84,7 @@ public class AddTripOfferingPanel extends JPanel {
 
         resultsTextArea.setText(AdminControlPanelFrame
                 .getInstance()
-                .displayAllTripOfferings().toString()
+                .displayAllTripOfferings()
         );
     }
 

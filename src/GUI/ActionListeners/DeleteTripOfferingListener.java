@@ -56,7 +56,6 @@ public class DeleteTripOfferingListener implements ActionListener {
                     AdminControlPanelFrame
                             .getInstance()
                             .displayAllTripOfferings()
-                            .toString()
             );
         } catch (SQLException ex) {
             throw new RuntimeException(ex);

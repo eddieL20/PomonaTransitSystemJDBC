@@ -1,14 +1,12 @@
 package GUI.Frames;
 
 
-import GUI.Panels.TripSchedulePanel;
-
 import javax.swing.*;
 import java.awt.*;
 
-public class EditFrame extends JFrame {
+public class PopUpFrame extends JFrame {
 
-    public EditFrame(JPanel panel){
+    public PopUpFrame(JPanel panel){
         this.setTitle("Trip Schedule");
         this.setLayout(new BorderLayout()); // border layout lets you add components to edges and center
 
