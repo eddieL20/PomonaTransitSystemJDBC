@@ -91,6 +91,12 @@ public class AdminControlPanelFrame extends JFrame {
                     PopUpFrame deleteBusFrame = new PopUpFrame(new DeleteBusPanel());
                     deleteBusFrame.setTitle("Delete Bus");
                 });
+
+        adminPanel.getChangeDriverButton()
+                .addActionListener(e -> {
+                    PopUpFrame changeDriverFrame = new PopUpFrame(new ChangeDriverForTripOfferingPanel());
+                    changeDriverFrame.setTitle("Change Driver for Trip Offering");
+                });
     }
 
     public Connection getConnection() {

@@ -11,7 +11,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class ChangeBusForTripOfferingListener implements ActionListener {
-    // TODO: ChangeBusForTripOfferingListener
     private ChangeBusForTripOfferingPanel changeBusForTripOfferingPanel;
 
     public ChangeBusForTripOfferingListener(

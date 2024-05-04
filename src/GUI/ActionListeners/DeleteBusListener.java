@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DeleteBusListener implements ActionListener {
-    // TODO: DeleteBusListener
     private DeleteBusPanel deleteBusPanel;
 
     public DeleteBusListener(DeleteBusPanel deleteBusPanel) {
