@@ -37,6 +37,9 @@ public class DisplayTripScheduleListener implements ActionListener {
                 StringWriter stringWriter = new StringWriter();
                 while(resultSet.next()){
                     stringWriter.write(String.format("%n====================================%n"));
+                    stringWriter.write(String.format("Start Location: %s%n", startLocation));
+                    stringWriter.write(String.format("Destination: %s%n", destination));
+                    stringWriter.write(String.format("Date: %s%n", date.toString()));
                     stringWriter.write(String.format("Trip Number: %s%n", resultSet.getString("TripNumber")));
                     stringWriter.write(String.format("Scheduled Start Time: %s%n", resultSet.getString("ScheduledStartTime")));
                     stringWriter.write(String.format("Scheduled Arrival Time: %s%n", resultSet.getString("ScheduledArrivalTime")));

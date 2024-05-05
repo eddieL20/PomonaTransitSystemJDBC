@@ -11,6 +11,7 @@ public class AdminPanel extends JPanel {
     private final JButton changeBusButton = new JButton(("Change Bus"));
     private final JButton displayTripStopsButton = new JButton("Display Trip Stops");
     private final JButton displayWeeklyScheduleButton = new JButton("Display Weekly Schedule");
+    private final JButton actualTripStopInfo = new JButton("Actual Trip Stop Info");
     private final JButton addDriverButton = new JButton("Add Driver");
     private final JButton deleteBusButton = new JButton("Delete Bus");
 
@@ -52,6 +53,9 @@ public class AdminPanel extends JPanel {
         c.gridy = 8;
         this.add(deleteBusButton, c);
 
+        c.gridy = 9;
+        this.add(actualTripStopInfo, c);
+
     }
 
     public JButton getDisplayTripScheduleButton() {
@@ -88,5 +92,9 @@ public class AdminPanel extends JPanel {
 
     public JButton getDeleteBusButton() {
         return deleteBusButton;
+    }
+
+    public JButton getActualTripStopInfo() {
+        return actualTripStopInfo;
     }
 }

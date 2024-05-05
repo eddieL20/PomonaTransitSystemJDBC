@@ -109,6 +109,12 @@ public class AdminControlPanelFrame extends JFrame {
                     PopUpFrame weeklyFrame = new PopUpFrame(new DisplayWeeklySchedulePanel());
                     weeklyFrame.setTitle("Display Weekly Schedule");
                 });
+
+        adminPanel.getActualTripStopInfo()
+                .addActionListener(e -> {
+                    PopUpFrame actualTripStopFrame = new PopUpFrame(new ActualTripStopInfoPanel());
+                    actualTripStopFrame.setTitle("Actual Trip Stop Info");
+                });
     }
 
     public Connection getConnection() {
@@ -173,6 +179,30 @@ public class AdminControlPanelFrame extends JFrame {
             }
             return stringWriter.toString();
         } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String displayAllActualTripInfo(){
+        String query = "SELECT * FROM ActualTripStopInfo";
+        try(PreparedStatement statement = connection.prepareStatement(query)){
+            ResultSet resultSet = statement.executeQuery();
+            StringWriter stringWriter = new StringWriter();
+            while(resultSet.next()){
+                stringWriter.write(String.format("%n====================================%n"));
+                stringWriter.write(String.format("Trip Number: %s%n", resultSet.getString("TripNumber")));
+                stringWriter.write(String.format("Date: %s%n", resultSet.getString("Date")));
+                stringWriter.write(String.format("Scheduled Start Time: %s%n", resultSet.getString("ScheduledStartTime")));
+                stringWriter.write(String.format("Stop Number: %s%n", resultSet.getString("StopNumber")));
+                stringWriter.write(String.format("Scheduled Arrival Time: %s%n", resultSet.getString("ScheduledArrivalTime")));
+                stringWriter.write(String.format("Actual Start Time: %s%n", resultSet.getString("ActualStartTime")));
+                stringWriter.write(String.format("Actual Arrival Time: %s%n", resultSet.getString("ActualArrivalTime")));
+                stringWriter.write(String.format("Number of Passengers In: %s%n", resultSet.getString("NumberOfPassengerIn")));
+                stringWriter.write(String.format("Number of Passengers Out: %s%n", resultSet.getString("NumberOfPassengerOut")));
+                stringWriter.write(String.format("====================================%n"));
+            }
+            return stringWriter.toString();
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
