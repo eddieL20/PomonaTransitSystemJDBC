@@ -115,6 +115,12 @@ public class AdminControlPanelFrame extends JFrame {
                     PopUpFrame actualTripStopFrame = new PopUpFrame(new ActualTripStopInfoPanel());
                     actualTripStopFrame.setTitle("Actual Trip Stop Info");
                 });
+
+        adminPanel.getAddBusButton()
+                .addActionListener(e -> {
+                    PopUpFrame addBusFrame = new PopUpFrame(new AddBussPanel());
+                    addBusFrame.setTitle("Add Bus");
+                });
     }
 
     public Connection getConnection() {
